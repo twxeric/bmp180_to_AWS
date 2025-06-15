@@ -7,36 +7,37 @@
   <style>
     body {
       font-family: "Segoe UI", Roboto, sans-serif;
-      background-color: #f5f7fa;
+      background-color: #121212;
+      color: #e0e0e0;
       margin: 0;
       padding: 20px;
-      color: #333;
     }
 
     h1 {
       text-align: center;
       font-size: 2em;
       margin-bottom: 30px;
+      color: #ffffff;
     }
 
     .charts {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 24px;
     }
 
     .chart-container {
-      background-color: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      width: 320px;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      width: 380px;
     }
 
     canvas {
       width: 100% !important;
-      height: 200px !important;
+      height: 240px !important;
     }
   </style>
 </head>
@@ -57,6 +58,27 @@
   </div>
 
   <script>
+    const baseOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#ffffff'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#bbbbbb' },
+          grid: { color: '#333333' }
+        },
+        y: {
+          ticks: { color: '#bbbbbb' },
+          grid: { color: '#333333' }
+        }
+      }
+    };
+
     const tempCtx = document.getElementById('tempChart').getContext('2d');
     const pressCtx = document.getElementById('pressChart').getContext('2d');
     const altCtx = document.getElementById('altChart').getContext('2d');
@@ -67,18 +89,21 @@
         labels: [],
         datasets: [{
           label: 'Temperature (°C)',
-          borderColor: '#e63946',
-          backgroundColor: 'rgba(230, 57, 70, 0.1)',
+          borderColor: '#ef476f',
+          backgroundColor: 'rgba(239, 71, 111, 0.1)',
           data: [],
           tension: 0.3
         }]
       },
       options: {
+        ...baseOptions,
         scales: {
+          ...baseOptions.scales,
           y: {
+            ...baseOptions.scales.y,
             min: 0,
             max: 50,
-            title: { display: true, text: '°C' }
+            title: { display: true, text: '°C', color: '#ffffff' }
           }
         }
       }
@@ -90,18 +115,21 @@
         labels: [],
         datasets: [{
           label: 'Pressure (hPa)',
-          borderColor: '#1d3557',
-          backgroundColor: 'rgba(29, 53, 87, 0.1)',
+          borderColor: '#06d6a0',
+          backgroundColor: 'rgba(6, 214, 160, 0.1)',
           data: [],
           tension: 0.3
         }]
       },
       options: {
+        ...baseOptions,
         scales: {
+          ...baseOptions.scales,
           y: {
+            ...baseOptions.scales.y,
             min: 800,
             max: 1200,
-            title: { display: true, text: 'hPa' }
+            title: { display: true, text: 'hPa', color: '#ffffff' }
           }
         }
       }
@@ -113,18 +141,21 @@
         labels: [],
         datasets: [{
           label: 'Altitude (m)',
-          borderColor: '#2a9d8f',
-          backgroundColor: 'rgba(42, 157, 143, 0.1)',
+          borderColor: '#ffd166',
+          backgroundColor: 'rgba(255, 209, 102, 0.1)',
           data: [],
           tension: 0.3
         }]
       },
       options: {
+        ...baseOptions,
         scales: {
+          ...baseOptions.scales,
           y: {
+            ...baseOptions.scales.y,
             min: 1700,
             max: 2800,
-            title: { display: true, text: 'm' }
+            title: { display: true, text: 'm', color: '#ffffff' }
           }
         }
       }
@@ -152,7 +183,7 @@
       altChart.update();
     }
 
-    setInterval(fetchData, 2000); // Update every 2 seconds
+    setInterval(fetchData, 2000); // Fetch every 2 seconds
   </script>
 </body>
 </html>
