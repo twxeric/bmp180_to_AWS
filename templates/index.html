@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Sensor BMP180 - AWS</title>
+  <title>BMP180 Charts</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    canvas { margin-bottom: 50px; }
-  </style>
 </head>
 <body>
-  <h1>Temperatura, Presión y Altitud</h1>
+  <h2>Temperature, Pressure, and Altitude</h2>
 
-  <canvas id="tempChart" width="800" height="300"></canvas>
-  <canvas id="pressChart" width="800" height="300"></canvas>
-  <canvas id="altChart" width="800" height="300"></canvas>
+  <canvas id="tempChart" width="600" height="250"></canvas>
+  <canvas id="pressChart" width="600" height="250"></canvas>
+  <canvas id="altChart" width="600" height="250"></canvas>
 
   <script>
     const tempCtx = document.getElementById('tempChart').getContext('2d');
@@ -25,11 +21,19 @@
       data: {
         labels: [],
         datasets: [{
-          label: 'Temperatura (°C)',
+          label: 'Temperature (°C)',
           borderColor: 'red',
           data: [],
-          fill: false
         }]
+      },
+      options: {
+        scales: {
+          y: {
+            min: 0,
+            max: 50,
+            title: { display: true, text: '°C' }
+          }
+        }
       }
     });
 
@@ -38,11 +42,19 @@
       data: {
         labels: [],
         datasets: [{
-          label: 'Presión (hPa)',
+          label: 'Pressure (hPa)',
           borderColor: 'blue',
           data: [],
-          fill: false
         }]
+      },
+      options: {
+        scales: {
+          y: {
+            min: 800,
+            max: 1200,
+            title: { display: true, text: 'hPa' }
+          }
+        }
       }
     });
 
@@ -51,53 +63,41 @@
       data: {
         labels: [],
         datasets: [{
-          label: 'Altitud (m)',
+          label: 'Altitude (m)',
           borderColor: 'green',
           data: [],
-          fill: false
         }]
+      },
+      options: {
+        scales: {
+          y: {
+            min: 1700,
+            max: 2800,
+            title: { display: true, text: 'm' }
+          }
+        }
       }
     });
 
-    function updateCharts(temp, press, alt) {
+    async function fetchData() {
+      const res = await fetch('/data');
+      const json = await res.json();
       const now = new Date().toLocaleTimeString();
 
       tempChart.data.labels.push(now);
-      tempChart.data.datasets[0].data.push(temp);
-      if (tempChart.data.labels.length > 20) {
-        tempChart.data.labels.shift();
-        tempChart.data.datasets[0].data.shift();
-      }
-      tempChart.update();
-
       pressChart.data.labels.push(now);
-      pressChart.data.datasets[0].data.push(press);
-      if (pressChart.data.labels.length > 20) {
-        pressChart.data.labels.shift();
-        pressChart.data.datasets[0].data.shift();
-      }
-      pressChart.update();
-
       altChart.data.labels.push(now);
-      altChart.data.datasets[0].data.push(alt);
-      if (altChart.data.labels.length > 20) {
-        altChart.data.labels.shift();
-        altChart.data.datasets[0].data.shift();
-      }
+
+      tempChart.data.datasets[0].data.push(json.temperature);
+      pressChart.data.datasets[0].data.push(json.pressure);
+      altChart.data.datasets[0].data.push(json.altitude);
+
+      tempChart.update();
+      pressChart.update();
       altChart.update();
     }
 
-    async function fetchData() {
-      try {
-        const response = await fetch('/data');
-        const data = await response.json();
-        updateCharts(data.temperature, data.pressure, data.altitude);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    }
-
-    setInterval(fetchData, 1000);
+    setInterval(fetchData, 2000); // every 2 seconds
   </script>
 </body>
 </html>
