@@ -1,15 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BMP180 Charts</title>
+  <meta charset="UTF-8">
+  <title>BMP180 Sensor Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+
+    .charts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .chart-container {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      width: 320px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 200px !important;
+    }
+  </style>
 </head>
 <body>
-  <h2>Temperature, Pressure, and Altitude</h2>
 
-  <canvas id="tempChart" width="600" height="250"></canvas>
-  <canvas id="pressChart" width="600" height="250"></canvas>
-  <canvas id="altChart" width="600" height="250"></canvas>
+  <h1>BMP180 Sensor Dashboard</h1>
+
+  <div class="charts">
+    <div class="chart-container">
+      <canvas id="tempChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="pressChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="altChart"></canvas>
+    </div>
+  </div>
 
   <script>
     const tempCtx = document.getElementById('tempChart').getContext('2d');
@@ -22,8 +67,10 @@
         labels: [],
         datasets: [{
           label: 'Temperature (°C)',
-          borderColor: 'red',
+          borderColor: '#e63946',
+          backgroundColor: 'rgba(230, 57, 70, 0.1)',
           data: [],
+          tension: 0.3
         }]
       },
       options: {
@@ -43,8 +90,10 @@
         labels: [],
         datasets: [{
           label: 'Pressure (hPa)',
-          borderColor: 'blue',
+          borderColor: '#1d3557',
+          backgroundColor: 'rgba(29, 53, 87, 0.1)',
           data: [],
+          tension: 0.3
         }]
       },
       options: {
@@ -64,8 +113,10 @@
         labels: [],
         datasets: [{
           label: 'Altitude (m)',
-          borderColor: 'green',
+          borderColor: '#2a9d8f',
+          backgroundColor: 'rgba(42, 157, 143, 0.1)',
           data: [],
+          tension: 0.3
         }]
       },
       options: {
@@ -84,9 +135,13 @@
       const json = await res.json();
       const now = new Date().toLocaleTimeString();
 
-      tempChart.data.labels.push(now);
-      pressChart.data.labels.push(now);
-      altChart.data.labels.push(now);
+      [tempChart, pressChart, altChart].forEach(chart => {
+        chart.data.labels.push(now);
+        if (chart.data.labels.length > 20) {
+          chart.data.labels.shift();
+          chart.data.datasets[0].data.shift();
+        }
+      });
 
       tempChart.data.datasets[0].data.push(json.temperature);
       pressChart.data.datasets[0].data.push(json.pressure);
@@ -97,7 +152,7 @@
       altChart.update();
     }
 
-    setInterval(fetchData, 2000); // every 2 seconds
+    setInterval(fetchData, 2000); // Update every 2 seconds
   </script>
 </body>
 </html>
