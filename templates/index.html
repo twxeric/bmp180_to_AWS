@@ -68,6 +68,18 @@
               size: 16 // fuente más grande para leyenda
             }
           }
+        },
+        tooltip: {
+          enabled: true,
+          mode: 'nearest',
+          intersect: false,
+          callbacks: {
+            label: function(context) {
+              const label = context.dataset.label || '';
+              const value = context.parsed.y !== undefined ? context.parsed.y : context.parsed;
+              return `${label}: ${value}`;
+            }
+          }
         }
       },
       scales: {
