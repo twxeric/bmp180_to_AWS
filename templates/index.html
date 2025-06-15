@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>BMP180 Sensor Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -15,7 +15,7 @@
 
     h1 {
       text-align: center;
-      font-size: 2em;
+      font-size: 2.5em;
       margin-bottom: 30px;
       color: #ffffff;
     }
@@ -32,12 +32,12 @@
       padding: 20px;
       border-radius: 14px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-      width: 380px;
+      width: 480px; /* Recuadro más ancho */
     }
 
     canvas {
       width: 100% !important;
-      height: 240px !important;
+      height: 320px !important; /* Recuadro más alto */
     }
   </style>
 </head>
@@ -63,18 +63,32 @@
       plugins: {
         legend: {
           labels: {
-            color: '#ffffff'
+            color: '#ffffff',
+            font: {
+              size: 16 // fuente más grande para leyenda
+            }
           }
         }
       },
       scales: {
         x: {
-          ticks: { color: '#bbbbbb' },
-          grid: { color: '#333333' }
+          ticks: { color: '#bbbbbb', font: { size: 14 } },
+          grid: { color: '#333333' },
+          title: {
+            display: true,
+            text: 'Time',
+            color: '#ffffff',
+            font: { size: 16, weight: 'bold' }
+          }
         },
         y: {
-          ticks: { color: '#bbbbbb' },
-          grid: { color: '#333333' }
+          ticks: { color: '#bbbbbb', font: { size: 14 } },
+          grid: { color: '#333333' },
+          title: {
+            display: true,
+            color: '#ffffff',
+            font: { size: 16, weight: 'bold' }
+          }
         }
       }
     };
@@ -103,7 +117,7 @@
             ...baseOptions.scales.y,
             min: 0,
             max: 50,
-            title: { display: true, text: '°C', color: '#ffffff' }
+            title: { display: true, text: '°C', color: '#ffffff', font: { size: 16, weight: 'bold' } }
           }
         }
       }
@@ -129,7 +143,7 @@
             ...baseOptions.scales.y,
             min: 800,
             max: 1200,
-            title: { display: true, text: 'hPa', color: '#ffffff' }
+            title: { display: true, text: 'hPa', color: '#ffffff', font: { size: 16, weight: 'bold' } }
           }
         }
       }
@@ -155,7 +169,7 @@
             ...baseOptions.scales.y,
             min: 1700,
             max: 2800,
-            title: { display: true, text: 'm', color: '#ffffff' }
+            title: { display: true, text: 'm', color: '#ffffff', font: { size: 16, weight: 'bold' } }
           }
         }
       }
@@ -183,7 +197,7 @@
       altChart.update();
     }
 
-    setInterval(fetchData, 2000); // Fetch every 2 seconds
+    setInterval(fetchData, 2000); // Actualiza cada 2 segundos
   </script>
 </body>
 </html>
