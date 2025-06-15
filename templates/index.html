@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sensor BMP180 - Gráfica</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Temperatura, Presión y Altitud</h2>
+  <canvas id="sensorChart" width="600" height="300"></canvas>
+  <script>
+    async function fetchData() {
+      const res = await fetch('/data');
+      return res.json();
+    }
+
+    function createChart(data) {
+      const ctx = document.getElementById('sensorChart').getContext('2d');
+      const labels = data.map(d => d.timestamp);
+      const temp = data.map(d => d.temperature);
+      const pres = data.map(d => d.pressure);
+      const alt = data.map(d => d.altitude);
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Temperatura (°C)',
+              data: temp,
+              borderColor: 'red',
+              fill: false
+            },
+            {
+              label: 'Presión (hPa)',
+              data: pres,
+              borderColor: 'blue',
+              fill: false
+            },
+            {
+              label: 'Altitud (m)',
+              data: alt,
+              borderColor: 'green',
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              title: { display: true, text: 'Tiempo' }
+            },
+            y: {
+              title: { display: true, text: 'Valores' }
+            }
+          }
+        }
+      });
+    }
+
+    fetchData().then(data => createChart(data));
+  </script>
+</body>
+</html>

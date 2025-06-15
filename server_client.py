@@ -2,7 +2,7 @@ import requests
 import time
 from bmp180 import get_readings
 
-SERVER_URL = "http://<YOUR_VM_PUBLIC_IP>:5000/data"  # Replace with your VM's public IP
+SERVER_URL = "http://18.119.106.100:5000/data" 
 
 while True:
     try:
@@ -13,4 +13,5 @@ while True:
     except Exception as e:
         print("Error sending data:", e)
     
-    time.sleep(10)  # Send every 10 seconds
+    time.sleep(1) 
+
