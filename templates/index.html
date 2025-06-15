@@ -1,66 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Sensor BMP180 - Gráfica</title>
+  <title>Sensor BMP180 - AWS</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    canvas { margin-bottom: 50px; }
+  </style>
 </head>
 <body>
-  <h2>Temperatura, Presión y Altitud</h2>
-  <canvas id="sensorChart" width="600" height="300"></canvas>
+  <h1>Temperatura, Presión y Altitud</h1>
+
+  <canvas id="tempChart" width="800" height="300"></canvas>
+  <canvas id="pressChart" width="800" height="300"></canvas>
+  <canvas id="altChart" width="800" height="300"></canvas>
+
   <script>
+    const tempCtx = document.getElementById('tempChart').getContext('2d');
+    const pressCtx = document.getElementById('pressChart').getContext('2d');
+    const altCtx = document.getElementById('altChart').getContext('2d');
+
+    const tempChart = new Chart(tempCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Temperatura (°C)',
+          borderColor: 'red',
+          data: [],
+          fill: false
+        }]
+      }
+    });
+
+    const pressChart = new Chart(pressCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Presión (hPa)',
+          borderColor: 'blue',
+          data: [],
+          fill: false
+        }]
+      }
+    });
+
+    const altChart = new Chart(altCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Altitud (m)',
+          borderColor: 'green',
+          data: [],
+          fill: false
+        }]
+      }
+    });
+
+    function updateCharts(temp, press, alt) {
+      const now = new Date().toLocaleTimeString();
+
+      tempChart.data.labels.push(now);
+      tempChart.data.datasets[0].data.push(temp);
+      if (tempChart.data.labels.length > 20) {
+        tempChart.data.labels.shift();
+        tempChart.data.datasets[0].data.shift();
+      }
+      tempChart.update();
+
+      pressChart.data.labels.push(now);
+      pressChart.data.datasets[0].data.push(press);
+      if (pressChart.data.labels.length > 20) {
+        pressChart.data.labels.shift();
+        pressChart.data.datasets[0].data.shift();
+      }
+      pressChart.update();
+
+      altChart.data.labels.push(now);
+      altChart.data.datasets[0].data.push(alt);
+      if (altChart.data.labels.length > 20) {
+        altChart.data.labels.shift();
+        altChart.data.datasets[0].data.shift();
+      }
+      altChart.update();
+    }
+
     async function fetchData() {
-      const res = await fetch('/data');
-      return res.json();
+      try {
+        const response = await fetch('/data');
+        const data = await response.json();
+        updateCharts(data.temperature, data.pressure, data.altitude);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
     }
 
-    function createChart(data) {
-      const ctx = document.getElementById('sensorChart').getContext('2d');
-      const labels = data.map(d => d.timestamp);
-      const temp = data.map(d => d.temperature);
-      const pres = data.map(d => d.pressure);
-      const alt = data.map(d => d.altitude);
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Temperatura (°C)',
-              data: temp,
-              borderColor: 'red',
-              fill: false
-            },
-            {
-              label: 'Presión (hPa)',
-              data: pres,
-              borderColor: 'blue',
-              fill: false
-            },
-            {
-              label: 'Altitud (m)',
-              data: alt,
-              borderColor: 'green',
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: {
-              title: { display: true, text: 'Tiempo' }
-            },
-            y: {
-              title: { display: true, text: 'Valores' }
-            }
-          }
-        }
-      });
-    }
-
-    fetchData().then(data => createChart(data));
+    setInterval(fetchData, 1000);
   </script>
 </body>
 </html>
