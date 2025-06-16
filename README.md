@@ -51,7 +51,7 @@ This project collects temperature, pressure, and altitude data from a BMP180 sen
   sudo raspi-config
   # Navigate to Interface Options -> I2C -> Enable
   
-### 2. Create and activate a virtual environment
+### 2. Create and activate a virtual environment in VM AWS
   ```bash
   python3 -m venv venv
   source venv/bin/activate
@@ -61,8 +61,10 @@ This project collects temperature, pressure, and altitude data from a BMP180 sen
   sudo apt-get update
   sudo apt-get install python3-pip i2c-tools
   pip3 install smbus2 requests flask
+  pip install flask-cors
+
   ```
-### 4. Test BMP180 sensor reading
+### 4. Test BMP180 sensor reading in RpPi
 Run the provided bmp180.py script to verify you can read sensor values:
   ```bahs
   python3 bmp180.py
