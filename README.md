@@ -69,7 +69,7 @@ Run the provided bmp180.py script to verify you can read sensor values:
   ```
 ### 5. Start Flask server on AWS
   ```bahs
-  python3 main.py
+  flask --app main run --host 0.0.0.0
   ```
 
 ### 6. Configure and run Raspberry Pi client
@@ -82,7 +82,7 @@ Run the client script:
 ## Usage
 Open your browser and navigate to:
   ```bahs
-  [python3 server_client.py](http://<EC2_PUBLIC_IP>:5000/)
+  http://<EC2_PUBLIC_IP>:5000/
   ```
 You’ll see three real‑time charts for temperature, pressure, and altitude updating every 2 seconds.
 Hover over points to see exact values in tooltips.
