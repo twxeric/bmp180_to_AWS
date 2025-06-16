@@ -2,7 +2,7 @@ import requests
 import time
 from bmp180 import get_readings
 
-SERVER_URL = "http://18.119.106.100:5000/data" 
+SERVER_URL = "http://<EC2_PUBLIC_IP>:5000/data" 
 
 while True:
     try:
