@@ -13,8 +13,6 @@ This project collects temperature, pressure, and altitude data from a BMP180 sen
 
 ---
 
-![Connection diagram]([https://url-de-la-imagen.com/imagen.jpg](https://drive.google.com/file/d/1sDxIManOimCl1LKIrl2pgc-DnnGK0wA6/view?usp=sharing))
-
 
 ## Hardware
 - Raspberry Pi 3 Model B+  
