@@ -13,12 +13,14 @@ This project collects temperature, pressure, and altitude data from a BMP180 sen
 
 ---
 
-
 ## Hardware
 - Raspberry Pi 3 Model B+  
 - BMP180 Barometric Pressure and Temperature Sensor  
 - Connection via I2C interface
-  
+
+## Circuit Diagram
+
+![Circuit Diagram](images/circuit.jpg)  
 
 ## Software
 - **Raspberry Pi**  
